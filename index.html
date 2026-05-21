@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Song | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="apple-touch-icon" href="./favicon.png" />
+  </head>
+  <body class="bg-[#0A0A0A] text-white">
+    <header class="fixed top-0 left-0 right-0 z-50 nav-glass">
+      <nav class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-3 flex items-center justify-between">
+        <a href="#hero" class="flex items-center gap-3 no-underline group">
+          <div class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden border border-zinc-700 group-hover:border-yellow-500 transition-all duration-300 flex-shrink-0">
+            <img src="./images/logo1.png" alt="cresong logo" class="w-full h-full object-cover" />
+          </div>
+          <span class="text-base md:text-lg font-bold tracking-widest text-white/90 group-hover:text-yellow-500 transition-colors duration-300">cresong</span>
+        </a>
+        <ul class="flex items-center gap-6 md:gap-8">
+          <li>
+            <a href="#hero" class="nav-link active">Home</a>
+          </li>
+          <li>
+            <a href="#portfolio" class="nav-link">Portfolio</a>
+          </li>
+          <li>
+            <a href="#about" class="nav-link">About</a>
+          </li>
+          <li>
+            <a href="#contact" class="nav-link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section
+        id="hero"
+        class="min-h-screen flex items-center justify-center px-6 text-center hero-section"
+      >
+        <div class="hero-background" aria-hidden="true"></div>
+        <canvas id="hero-reveal-canvas" class="hero-reveal-canvas" aria-hidden="true"></canvas>
+        <div class="w-full max-w-4xl hero-content">
+          <h1
+            id="hero-title"
+            class="hero-title-3d text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-tight"
+          >
+            HI, I'M SONG
+          </h1>
+          <p class="mt-6 text-xl md:text-2xl text-zinc-300 h-9">
+            <span class="sr-only">My focus:</span>
+            <span id="typewriter" aria-live="polite"></span>
+            <span class="cursor" aria-hidden="true">|</span>
+          </p>
+          <button
+            id="explore-btn"
+            class="mt-10 bg-yellow-500 text-black font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:bg-yellow-400 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+          >
+            Explore My Work
+          </button>
+        </div>
+      </section>
+
+      <section id="portfolio" class="px-6 md:px-12 lg:px-20 pt-16 pb-24 scroll-mt-24">
+        <div class="max-w-7xl mx-auto">
+          <div
+            class="reveal flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-10"
+            id="filters"
+          >
+            <button class="filter-btn active" data-filter="landscape">Landscape</button>
+            <button class="filter-btn" data-filter="portrait">Portrait</button>
+            <button class="filter-btn" data-filter="cityscape">Cityscape</button>
+            <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
+            <button class="filter-btn" data-filter="architecture">Architecture</button>
+            <button class="filter-btn" data-filter="aigc">AIGC</button>
+            <button class="filter-btn" data-filter="vibecoding">Vibe Coding</button>
+          </div>
+
+          <p id="gallery-note" class="reveal text-center text-zinc-400 mb-6">
+            Auto loading images from local folders...
+          </p>
+          <div id="gallery" class="gallery-grid"></div>
+
+          <div class="reveal mt-10 text-center">
+            <button
+              id="view-more-btn"
+              class="bg-yellow-500 text-black font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:bg-yellow-400 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+            >
+              View More
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="collection" class="px-6 md:px-12 lg:px-20 pb-24 hidden">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex items-center justify-between gap-4 mb-8 flex-wrap">
+            <h2 id="collection-title" class="text-3xl md:text-4xl font-bold tracking-tight">
+              Full Collection
+            </h2>
+            <button id="back-btn" class="back-btn">
+              Back to Portfolio
+            </button>
+          </div>
+          <div id="collection-gallery" class="gallery-grid"></div>
+          <div class="reveal mt-10 text-center">
+            <button id="back-btn-bottom" class="back-btn">
+              Back to Portfolio
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="about" class="px-6 md:px-12 lg:px-20 py-20">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="reveal section-title-refined text-3xl md:text-4xl font-bold tracking-tight text-center mb-6">About Me</h2>
+        <div class="about-grid">
+          <div id="about-photos" class="about-photos reveal reveal-delay-1"></div>
+          <div id="about-text" class="about-text reveal reveal-delay-2">
+            <p class="text-zinc-400">Loading...</p>
+          </div>
+        </div>
+
+        <div class="resume-section">
+          <h3 class="reveal resume-section-title">Resume</h3>
+          <p class="reveal resume-section-hint">Tap any card to flip and read more.</p>
+          <div id="resume-cards" class="resume-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact" class="border-t border-zinc-800 px-6 md:px-12 lg:px-20 py-12">
+      <div class="max-w-7xl mx-auto text-center">
+        <p class="reveal text-2xl md:text-3xl font-light tracking-tight text-white">
+          Let's create something amazing together.
+        </p>
+        <div class="reveal reveal-delay-1 mt-8 flex flex-col items-center gap-5">
+          <div class="flex items-center gap-5">
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Rednote">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.23 14.05c-.35.78-1.04 1.36-1.87 1.58-.48.13-.99.14-1.48.05-.48-.09-.99-.28-1.36-.59-.37-.31-.67-.78-.84-1.24-.16-.46-.24-1.02-.16-1.51.06-.36.2-.76.43-1.04.23-.28.53-.5.87-.63.34-.13.65-.17 1.01-.16.36.01.74.09 1.06.25.32.16.59.42.78.7.26.39.41.88.44 1.34.03.46-.06.97-.28 1.4-.22.43-.49.77-.83 1.06.3.14.63.21.96.21.49 0 .97-.11 1.4-.34.43-.23.8-.58 1.05-1.01.1-.17.04-.38-.13-.48-.17-.1-.38-.04-.48.13-.17.3-.42.55-.72.71-.3.16-.64.25-.98.25-.23 0-.45-.04-.66-.13.27-.33.48-.72.6-1.13.12-.41.15-.85.09-1.27-.06-.42-.21-.82-.44-1.16-.23-.34-.52-.62-.86-.83-.34-.21-.72-.33-1.11-.37-.39-.04-.79.01-1.16.13-.37.12-.7.32-.98.58-.34.31-.59.7-.75 1.13-.16.43-.22.89-.19 1.35.03.46.15.9.35 1.3.2.4.47.75.79 1.03.32.28.67.48 1.05.62.38.14.78.21 1.18.21.68 0 1.35-.18 1.93-.52.58-.34 1.07-.82 1.42-1.38.1-.17.04-.38-.13-.48-.17-.1-.38-.04-.48.13z"/>
+              </svg>
+            </a>
+          </div>
+          <a
+            href="mailto:ruosongli8@gmail.com"
+            class="text-base md:text-lg font-light text-white hover:text-yellow-500 transition-colors duration-300"
+          >
+            ruosongli8@gmail.com
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <div id="media-modal" class="media-modal hidden" aria-hidden="true">
+      <img id="media-modal-image" class="media-modal-content" alt="Full size artwork" />
+      <video id="media-modal-video" class="media-modal-content hidden" muted loop playsinline controls></video>
+    </div>
+
+    <script src="./images/about/content.js"></script>
+    <script src="./images/about/resume.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

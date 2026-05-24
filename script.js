@@ -287,12 +287,17 @@ function openCollectionView() {
   renderCollection(currentFilter);
   portfolioSection.classList.add("hidden");
   collectionSection.classList.remove("hidden");
+  collectionSection.classList.remove("fading-out");
+  collectionSection.classList.add("fading-in");
   collectionSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function closeCollectionView() {
   collectionSection.classList.add("hidden");
+  collectionSection.classList.remove("fading-in");
   portfolioSection.classList.remove("hidden");
+  portfolioSection.classList.remove("fading-out");
+  portfolioSection.classList.add("fading-in");
   portfolioSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 

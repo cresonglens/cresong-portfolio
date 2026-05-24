@@ -1,3 +1,5 @@
+[English](README.md) | [中文](README_zh.md)
+
 # Song's Personal Portfolio
 
 A zero-dependency, vanilla web portfolio showcasing photography, AIGC artwork, and creative coding projects. Built with HTML, CSS, and JavaScript — no frameworks, no build step.

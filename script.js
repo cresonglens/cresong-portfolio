@@ -287,6 +287,10 @@ function openCollectionView() {
   renderCollection(currentFilter);
   portfolioSection.classList.add("hidden");
   collectionSection.classList.remove("hidden");
+  collectionSection.style.opacity = "1";
+  collectionSection.style.transform = "scale(1)";
+  collectionSection.style.filter = "none";
+  collectionSection.style.pointerEvents = "auto";
   collectionSection.classList.remove("fading-out");
   collectionSection.classList.add("fading-in");
   collectionSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -294,8 +298,11 @@ function openCollectionView() {
 
 function closeCollectionView() {
   collectionSection.classList.add("hidden");
-  collectionSection.classList.remove("fading-in");
   portfolioSection.classList.remove("hidden");
+  portfolioSection.style.opacity = "1";
+  portfolioSection.style.transform = "scale(1)";
+  portfolioSection.style.filter = "none";
+  portfolioSection.style.pointerEvents = "auto";
   portfolioSection.classList.remove("fading-out");
   portfolioSection.classList.add("fading-in");
   portfolioSection.scrollIntoView({ behavior: "smooth", block: "start" });

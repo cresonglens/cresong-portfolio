@@ -1,34 +1,13 @@
 # macOS
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
 
 # Windows
 Thumbs.db
-ehthumbs.db
 Desktop.ini
-
-# Design source files (not web assets)
-*.psd
-*.rte
-*.pdf
-*.ai
-*.sketch
-
-# Scripts / temp
-compress.ps1
-*.tmp.jpg
 
 # Editor
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# Temporarily exclude large media to avoid push failures
-images/aigc/videos/
-images/aigc/videos/
-images/aigc/videos/
+# Large media files
+images/aigc/video/

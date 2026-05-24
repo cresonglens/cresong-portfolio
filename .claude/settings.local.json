@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sips --resampleWidth 40 \"/Users/insta360/Documents/projects/personal portfolio/images/logo.png\" --out \"/Users/insta360/Documents/projects/personal portfolio/images/logo-nav.png\")",
+      "Bash(sips -g pixelWidth -g pixelHeight \"/Users/insta360/Documents/projects/personal portfolio/images/logo-nav.png\")",
+      "Bash(python3)",
+      "Bash(sips --resampleWidth 32 \"/Users/insta360/Documents/projects/personal portfolio/images/logo1.png\" --out \"/Users/insta360/Documents/projects/personal portfolio/favicon.png\")"
+    ]
+  }
+}

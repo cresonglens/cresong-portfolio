@@ -1,4 +1,4 @@
-const words = ["Landscape", "Portrait", "Cityscape", "Lifestyle", "Architecture", "AIGC", "Vibe Coding"];
+﻿const words = ["Landscape", "Portrait", "Cityscape", "Lifestyle", "Architecture", "AIGC", "Vibe Coding"];
 const typewriterEl = document.getElementById("typewriter");
 const exploreBtn = document.getElementById("explore-btn");
 const heroSection = document.getElementById("hero");
@@ -9,7 +9,7 @@ const galleryEl = document.getElementById("gallery");
 const galleryNote = document.getElementById("gallery-note");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const navLinks = document.querySelectorAll(".nav-link");
-const observedSections = document.querySelectorAll("section[id], footer[id]");
+const observedSections = document.querySelectorAll("section[id]");
 const viewMoreBtn = document.getElementById("view-more-btn");
 const backBtn = document.getElementById("back-btn");
 const backBtnBottom = document.getElementById("back-btn-bottom");
@@ -29,26 +29,38 @@ const categoryConfig = {
   portrait: { label: "Portrait", folder: "images/portrait" },
   cityscape: { label: "Cityscape", folder: "images/cityscape" },
   lifestyle: { label: "Lifestyle", folder: "images/lifestyle" },
-  architecture: { label: "Architecture", folder: "images/architecture" },
+  architecture: {
+    label: "Architecture",
+    folder: "images/architecture",
+    groups: [
+      { name: "建构研究", label: "建构研究", folder: "images/architecture/建构研究", mediaType: "image" },
+      { name: "细部构造", label: "细部构造", folder: "images/architecture/细部构造", mediaType: "image" },
+      { name: "小住宅", label: "小住宅", folder: "images/architecture/小住宅", mediaType: "image" },
+      { name: "竹皮", label: "竹皮设计", folder: "images/architecture/竹皮", mediaType: "image" }
+    ]
+  },
   aigc: {
     label: "AIGC",
-    photosFolder: "images/aigc/photos",
-    videosFolder: "images/aigc/videos"
+    groups: [
+      { name: "car", label: "Car", folder: "images/aigc/car", mediaType: "image" },
+      { name: "earphone", label: "Earphone", folder: "images/aigc/earphone", mediaType: "image" },
+      { name: "Qinghai", label: "Qingahi", folder: "images/aigc/Qinghai", mediaType: "image" },
+      { name: "video", label: "Video", folder: "images/aigc/video", mediaType: "video" },
+      { name: "others", label: "Others", folder: "images/aigc/others", mediaType: "image" }
+    ]
   },
-  vibecoding: { label: "Vibe Coding", folder: "images/vibe-coding" }
+  vibecoding: {
+    label: "Vibe Coding",
+    folder: "images/vibe-coding",
+    groups: [
+      { name: "cameradog", label: "Cameradog", folder: "images/vibe-coding/cameradog", mediaType: "image" }
+    ]
+  }
 };
 const supportedImageExtensions = ["jpg", "jpeg", "png", "webp"];
 const supportedVideoExtensions = ["mp4", "webm", "mov"];
 
-const discoveredCollectionData = {
-  landscape: [],
-  portrait: [],
-  cityscape: [],
-  lifestyle: [],
-  architecture: [],
-  vibecoding: [],
-  aigc: { photos: [], videos: [] }
-};
+const discoveredCollectionData = {};
 
 function toTitleCase(text) {
   return text
@@ -61,6 +73,21 @@ function toTitleCase(text) {
 function fileNameFromPath(path) {
   const fullName = path.split("/").pop() || "";
   return fullName.replace(/\.[^.]+$/, "");
+}
+
+function hasGroups(categoryKey) {
+  const data = discoveredCollectionData[categoryKey];
+  return data && data.groups && Array.isArray(data.groups);
+}
+
+function flattenCategoryItems(categoryKey) {
+  const data = discoveredCollectionData[categoryKey];
+  if (hasGroups(categoryKey)) {
+    return data.groups.flatMap((g) =>
+      g.items.map((item) => ({ ...item, category: categoryKey, groupName: g.name }))
+    );
+  }
+  return (data || []).map((item) => ({ ...item, category: categoryKey }));
 }
 
 function imageExists(url) {
@@ -137,7 +164,7 @@ async function discoverVideos(folder, maxIndex = 300, missLimit = 30) {
     const foundUrl = await resolveVideoByIndex(folder, i);
     if (foundUrl) {
       results.push({
-        title: `AIGC Video ${i}`,
+        title: `Video ${i}`,
         src: foundUrl,
         mediaType: "video"
       });
@@ -150,12 +177,18 @@ async function discoverVideos(folder, maxIndex = 300, missLimit = 30) {
   return results;
 }
 
-function createGalleryItemHTML(item, category) {
+function createGalleryItemHTML(item, category, opts = {}) {
   const normalizedTitle = item.title || toTitleCase(fileNameFromPath(item.src));
-  const mediaNode =
-    item.mediaType === "video"
-      ? `<video src="${item.src}" muted loop playsinline preload="metadata"></video>`
-      : `<img src="${item.src}" alt="${normalizedTitle}" loading="lazy" />`;
+  let mediaNode;
+  if (item.mediaType === "video" && opts.useVideoThumbnail) {
+    mediaNode = `<div class="video-thumb-placeholder" aria-label="${normalizedTitle}">
+      <svg class="video-play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21" fill="currentColor" stroke="none"/></svg>
+    </div>`;
+  } else if (item.mediaType === "video") {
+    mediaNode = `<video src="${item.src}" muted loop playsinline preload="metadata"></video>`;
+  } else {
+    mediaNode = `<img src="${item.src}" alt="${normalizedTitle}" loading="lazy" decoding="async" />`;
+  }
   return `
     <article class="gallery-item visible" data-category="${category}" data-media-type="${item.mediaType || "image"}" data-src="${item.src}" data-title="${normalizedTitle}">
       ${mediaNode}
@@ -164,28 +197,18 @@ function createGalleryItemHTML(item, category) {
 }
 
 function getAllDiscoveredItems() {
-  const imageCategories = ["landscape", "portrait", "cityscape", "lifestyle", "architecture", "vibecoding"];
-  const aigcMerged = [
-    ...discoveredCollectionData.aigc.photos.map((item) => ({ ...item, category: "aigc" })),
-    ...discoveredCollectionData.aigc.videos.map((item) => ({ ...item, category: "aigc" }))
-  ];
-  return [
-    ...imageCategories.flatMap((cat) =>
-      discoveredCollectionData[cat].map((item) => ({ ...item, category: cat }))
-    ),
-    ...aigcMerged
-  ];
+  return Object.keys(categoryConfig).flatMap((cat) => flattenCategoryItems(cat));
 }
 
 function renderMainGallery() {
-  const imageCategories = ["landscape", "portrait", "cityscape", "lifestyle", "architecture", "vibecoding"];
-  const previewItems = [
-    ...imageCategories.flatMap((cat) =>
-      discoveredCollectionData[cat].slice(0, 4).map((item) => ({ ...item, category: cat }))
-    ),
-    ...discoveredCollectionData.aigc.photos.slice(0, 4).map((item) => ({ ...item, category: "aigc" })),
-    ...discoveredCollectionData.aigc.videos.slice(0, 4).map((item) => ({ ...item, category: "aigc" }))
-  ];
+  const previewItems = Object.keys(categoryConfig).flatMap((cat) => {
+    if (hasGroups(cat)) {
+      return discoveredCollectionData[cat].groups.flatMap((g) =>
+        g.items.slice(0, 4).map((item) => ({ ...item, category: cat, groupName: g.name }))
+      );
+    }
+    return (discoveredCollectionData[cat] || []).slice(0, 4).map((item) => ({ ...item, category: cat }));
+  });
 
   galleryEl.innerHTML = previewItems
     .map((item) => createGalleryItemHTML(item, item.category))
@@ -263,59 +286,43 @@ function filterGallery(filter) {
 }
 
 function getCollectionItemsByFilter(filter) {
-  if (filter === "aigc") {
-    return [
-      ...discoveredCollectionData.aigc.photos.map((item) => ({
-        ...item,
-        category: "aigc",
-        subType: "photos"
-      })),
-      ...discoveredCollectionData.aigc.videos.map((item) => ({
-        ...item,
-        category: "aigc",
-        subType: "videos"
-      }))
-    ];
-  }
-
-  return (discoveredCollectionData[filter] || []).map((item) => ({
-    ...item,
-    category: filter
-  }));
+  return flattenCategoryItems(filter);
 }
 
 function renderCollection(filter) {
-  const items = getCollectionItemsByFilter(filter);
   const config = categoryConfig[filter] || {};
   const heading = `${config.label || filter.toUpperCase()} Collection`;
   collectionTitle.textContent = heading;
 
-  if (filter === "aigc") {
-    const photosHtml = discoveredCollectionData.aigc.photos
-      .map((item) => createGalleryItemHTML({ ...item, mediaType: "image" }, "aigc"))
-      .join("");
-    const videosHtml = discoveredCollectionData.aigc.videos
-      .map((item) => createGalleryItemHTML(item, "aigc"))
+  if (hasGroups(filter)) {
+    const groupsHtml = discoveredCollectionData[filter].groups
+      .map((g) => {
+        const itemsHtml = g.items
+          .map((item) => createGalleryItemHTML(item, filter, { useVideoThumbnail: true }))
+          .join("");
+        return `
+          <div style="grid-column: 1 / -1;">
+            <h3 class="section-split-title">${g.label}</h3>
+          </div>
+          ${itemsHtml || '<p style="grid-column: 1 / -1; color: #71717a; margin-bottom: 1.5rem;">No items found.</p>'}
+        `;
+      })
       .join("");
 
-    collectionGallery.innerHTML = `
-      <div class="col-span-full">
-        <h3 class="section-split-title">AIGC Photos</h3>
-      </div>
-      ${photosHtml || '<p class="text-zinc-400 col-span-full mb-6">No AIGC photos found.</p>'}
-      <div class="col-span-full mt-2">
-        <h3 class="section-split-title">AIGC Videos</h3>
-      </div>
-      ${videosHtml || '<p class="text-zinc-400 col-span-full">No AIGC videos found.</p>'}
-    `;
+    collectionGallery.innerHTML = groupsHtml;
   } else {
+    const items = flattenCategoryItems(filter);
     collectionGallery.innerHTML = items
-      .map((item) => createGalleryItemHTML(item, item.category))
+      .map((item) => createGalleryItemHTML(item, item.category, { useVideoThumbnail: true }))
       .join("");
   }
 
   collectionGallery.querySelectorAll("video").forEach((video) => {
     video.play().catch(() => {});
+  });
+
+  collectionGallery.querySelectorAll(".gallery-item").forEach((item) => {
+    item.dataset.revealRegistered = "1";
   });
 }
 
@@ -371,22 +378,47 @@ const sectionObserver = new IntersectionObserver(
 observedSections.forEach((section) => sectionObserver.observe(section));
 
 async function initializeAutoGallery() {
-  const imageCategories = ["landscape", "portrait", "cityscape", "lifestyle", "architecture", "vibecoding"];
-  for (const category of imageCategories) {
-    // eslint-disable-next-line no-await-in-loop
-    discoveredCollectionData[category] = await discoverCategoryImages(category);
-  }
+  const allCategoryKeys = Object.keys(categoryConfig);
 
-  discoveredCollectionData.aigc.photos = await discoverCategoryImages(
-    "aigc",
-    300,
-    30,
-    categoryConfig.aigc.photosFolder,
-    "AIGC Photo"
-  ).then(
-    (items) => items.map((item, idx) => ({ ...item, title: `AIGC Photo ${idx + 1}`, mediaType: "image" }))
-  );
-  discoveredCollectionData.aigc.videos = await discoverVideos(categoryConfig.aigc.videosFolder);
+  for (const cat of allCategoryKeys) {
+    const config = categoryConfig[cat];
+    if (config.groups && config.groups.length > 0) {
+      // Category with subfolder groups
+      discoveredCollectionData[cat] = { groups: [] };
+      for (const group of config.groups) {
+        const label = group.label || toTitleCase(group.name);
+        if (group.mediaType === "video") {
+          // eslint-disable-next-line no-await-in-loop
+          const videos = await discoverVideos(group.folder);
+          discoveredCollectionData[cat].groups.push({
+            name: group.name,
+            label: label,
+            items: videos
+          });
+        } else {
+          // eslint-disable-next-line no-await-in-loop
+          const items = await discoverCategoryImages(
+            cat, 300, 30,
+            group.folder,
+            label
+          );
+          discoveredCollectionData[cat].groups.push({
+            name: group.name,
+            label: label,
+            items: items.map((item, idx) => ({
+              ...item,
+              title: `${label} ${idx + 1}`,
+              mediaType: group.mediaType || "image"
+            }))
+          });
+        }
+      }
+    } else if (config.folder) {
+      // Category with flat folder
+      // eslint-disable-next-line no-await-in-loop
+      discoveredCollectionData[cat] = await discoverCategoryImages(cat);
+    }
+  }
 
   renderMainGallery();
   filterGallery("landscape");
@@ -622,6 +654,32 @@ initializeHeroReveal();
 initializeHero3DTitle();
 initializeAbout();
 initializeScrollReveal();
+initializeSectionCards();
+
+function initializeSectionCards() {
+  const cards = document.querySelectorAll(".section-card");
+  if (!cards.length || typeof IntersectionObserver === "undefined") return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.intersectionRatio < 0.25) {
+          entry.target.classList.add("fading-out");
+          entry.target.classList.remove("fading-in");
+        } else {
+          entry.target.classList.remove("fading-out");
+          entry.target.classList.add("fading-in");
+        }
+      });
+    },
+    { threshold: [0, 0.15, 0.3, 0.5, 0.75] }
+  );
+
+  cards.forEach((card) => {
+    card.classList.add("fading-in");
+    observer.observe(card);
+  });
+}
 
 function initializeScrollReveal() {
   if (typeof IntersectionObserver === "undefined") {

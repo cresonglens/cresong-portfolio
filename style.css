@@ -222,8 +222,9 @@ body {
   min-height: 220px;
   max-height: 320px;
   object-fit: cover;
+  filter: grayscale(1) brightness(0.6);
   transform: scale(1);
-  transition: transform 0.55s ease;
+  transition: filter 0.55s ease, transform 0.55s ease;
   pointer-events: none;
 }
 
@@ -250,7 +251,8 @@ body {
 .gallery-item:hover img,
 .gallery-item:hover video,
 .gallery-item:hover .video-thumb-placeholder {
-  transform: scale(1.05);
+  filter: grayscale(0) brightness(1);
+	transform: scale(1.05);
 }
 
 .gallery-item:hover .video-play-icon {

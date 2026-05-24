@@ -1,0 +1,245 @@
+{
+  "landscape": [
+    "images/landscape/1.jpg",
+    "images/landscape/6.jpg",
+    "images/landscape/7.jpg",
+    "images/landscape/8.jpg",
+    "images/landscape/9.jpg",
+    "images/landscape/10.jpg"
+  ],
+  "portrait": [
+    "images/portrait/1.jpg",
+    "images/portrait/2.jpg",
+    "images/portrait/3.jpg",
+    "images/portrait/4.jpg",
+    "images/portrait/5.jpg",
+    "images/portrait/6.jpg",
+    "images/portrait/7.jpg"
+  ],
+  "cityscape": [
+    "images/cityscape/1.jpg",
+    "images/cityscape/2.jpg",
+    "images/cityscape/3.jpg",
+    "images/cityscape/4.jpg",
+    "images/cityscape/9.jpg",
+    "images/cityscape/18.jpg"
+  ],
+  "lifestyle": [
+    "images/lifestyle/1.jpg",
+    "images/lifestyle/4.jpg",
+    "images/lifestyle/5.jpg",
+    "images/lifestyle/6.jpg",
+    "images/lifestyle/7.jpg",
+    "images/lifestyle/8.jpg",
+    "images/lifestyle/9.jpg",
+    "images/lifestyle/10.jpg",
+    "images/lifestyle/11.jpg",
+    "images/lifestyle/12.jpg",
+    "images/lifestyle/13.jpg",
+    "images/lifestyle/14.jpg",
+    "images/lifestyle/15.jpg",
+    "images/lifestyle/16.jpg",
+    "images/lifestyle/17.jpg",
+    "images/lifestyle/18.jpg",
+    "images/lifestyle/19.jpg",
+    "images/lifestyle/20.jpg",
+    "images/lifestyle/21.jpg",
+    "images/lifestyle/22.jpg",
+    "images/lifestyle/23.jpg",
+    "images/lifestyle/24.jpg",
+    "images/lifestyle/25.jpg",
+    "images/lifestyle/26.jpg",
+    "images/lifestyle/27.jpg",
+    "images/lifestyle/28.jpg",
+    "images/lifestyle/29.jpg",
+    "images/lifestyle/30.jpg",
+    "images/lifestyle/31.jpg"
+  ],
+  "architecture": [
+    {
+      "type": "grouped",
+      "groups": [
+        {
+          "name": "建构研究",
+          "label": "建构研究",
+          "folder": "images/architecture/建构研究",
+          "mediaType": "image",
+          "items": [
+            "images/architecture/建构研究/1.png",
+            "images/architecture/建构研究/2.png",
+            "images/architecture/建构研究/3.png",
+            "images/architecture/建构研究/4.jpg",
+            "images/architecture/建构研究/5.jpg"
+          ]
+        },
+        {
+          "name": "细部构造",
+          "label": "细部构造",
+          "folder": "images/architecture/细部构造",
+          "mediaType": "image",
+          "items": [
+            "images/architecture/细部构造/24.jpg",
+            "images/architecture/细部构造/25.jpg",
+            "images/architecture/细部构造/26.jpg",
+            "images/architecture/细部构造/27.jpg",
+            "images/architecture/细部构造/28.jpg",
+            "images/architecture/细部构造/29.jpg"
+          ]
+        },
+        {
+          "name": "小住宅",
+          "label": "小住宅",
+          "folder": "images/architecture/小住宅",
+          "mediaType": "image",
+          "items": [
+            "images/architecture/小住宅/1.jpg",
+            "images/architecture/小住宅/2.jpg",
+            "images/architecture/小住宅/3.jpg",
+            "images/architecture/小住宅/4.jpg",
+            "images/architecture/小住宅/6.jpg",
+            "images/architecture/小住宅/7.jpg",
+            "images/architecture/小住宅/8.jpg",
+            "images/architecture/小住宅/9.jpg",
+            "images/architecture/小住宅/10.jpg",
+            "images/architecture/小住宅/15.jpg",
+            "images/architecture/小住宅/16.jpg",
+            "images/architecture/小住宅/17.jpg",
+            "images/architecture/小住宅/21.jpg",
+            "images/architecture/小住宅/22.jpg",
+            "images/architecture/小住宅/23.jpg"
+          ]
+        },
+        {
+          "name": "竹皮",
+          "label": "竹皮",
+          "folder": "images/architecture/竹皮",
+          "mediaType": "image",
+          "items": [
+            "images/architecture/竹皮/30.jpg",
+            "images/architecture/竹皮/31.jpg",
+            "images/architecture/竹皮/32.jpg",
+            "images/architecture/竹皮/33.jpg",
+            "images/architecture/竹皮/34.jpg",
+            "images/architecture/竹皮/35.jpg",
+            "images/architecture/竹皮/36.jpg"
+          ]
+        }
+      ]
+    }
+  ],
+  "aigc": [
+    {
+      "type": "grouped",
+      "groups": [
+        {
+          "name": "car",
+          "label": "Car",
+          "folder": "images/aigc/car",
+          "mediaType": "image",
+          "items": [
+            "images/aigc/car/17.jpg",
+            "images/aigc/car/18.jpg",
+            "images/aigc/car/19.jpg",
+            "images/aigc/car/20.jpg",
+            "images/aigc/car/21.jpg",
+            "images/aigc/car/22.jpg",
+            "images/aigc/car/23.jpg",
+            "images/aigc/car/24.jpg",
+            "images/aigc/car/25.jpg",
+            "images/aigc/car/26.jpg",
+            "images/aigc/car/27.jpg",
+            "images/aigc/car/36.jpg",
+            "images/aigc/car/37.jpg",
+            "images/aigc/car/38.jpg",
+            "images/aigc/car/39.jpg",
+            "images/aigc/car/40.jpg",
+            "images/aigc/car/41.jpg"
+          ]
+        },
+        {
+          "name": "earphone",
+          "label": "Earphone",
+          "folder": "images/aigc/earphone",
+          "mediaType": "image",
+          "items": [
+            "images/aigc/earphone/1.jpg",
+            "images/aigc/earphone/2.jpg",
+            "images/aigc/earphone/30.jpg",
+            "images/aigc/earphone/31.jpg",
+            "images/aigc/earphone/32.jpg",
+            "images/aigc/earphone/33.jpg",
+            "images/aigc/earphone/34.jpg",
+            "images/aigc/earphone/35.jpg"
+          ]
+        },
+        {
+          "name": "Qinghai",
+          "label": "Qinghai",
+          "folder": "images/aigc/Qinghai",
+          "mediaType": "image",
+          "items": [
+            "images/aigc/Qinghai/2.jpg",
+            "images/aigc/Qinghai/3.jpg",
+            "images/aigc/Qinghai/4.jpg",
+            "images/aigc/Qinghai/5.jpg",
+            "images/aigc/Qinghai/6.jpg",
+            "images/aigc/Qinghai/7.jpg",
+            "images/aigc/Qinghai/8.jpg",
+            "images/aigc/Qinghai/9.jpg",
+            "images/aigc/Qinghai/10.jpg",
+            "images/aigc/Qinghai/11.jpg",
+            "images/aigc/Qinghai/12.jpg",
+            "images/aigc/Qinghai/13.jpg",
+            "images/aigc/Qinghai/14.jpg",
+            "images/aigc/Qinghai/15.jpg",
+            "images/aigc/Qinghai/16.jpg"
+          ]
+        },
+        {
+          "name": "video",
+          "label": "Video",
+          "folder": "images/aigc/video",
+          "mediaType": "video",
+          "items": [
+            "images/aigc/video/11.mp4",
+            "images/aigc/video/12.mp4",
+            "images/aigc/video/13.mp4",
+            "images/aigc/video/14.mp4",
+            "images/aigc/video/15.mp4"
+          ]
+        },
+        {
+          "name": "others",
+          "label": "Others",
+          "folder": "images/aigc/others",
+          "mediaType": "image",
+          "items": [
+            "images/aigc/others/1.jpg"
+          ]
+        }
+      ]
+    }
+  ],
+  "vibe-coding": [
+    {
+      "type": "grouped",
+      "groups": [
+        {
+          "name": "cameradog",
+          "label": "Cameradog",
+          "folder": "images/vibe-coding/cameradog",
+          "mediaType": "image",
+          "items": [
+            "images/vibe-coding/cameradog/1.png",
+            "images/vibe-coding/cameradog/2.png",
+            "images/vibe-coding/cameradog/3.png",
+            "images/vibe-coding/cameradog/4.png",
+            "images/vibe-coding/cameradog/5.png",
+            "images/vibe-coding/cameradog/6.png",
+            "images/vibe-coding/cameradog/7.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

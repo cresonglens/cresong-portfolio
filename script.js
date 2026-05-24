@@ -57,10 +57,54 @@ const categoryConfig = {
     ]
   }
 };
-const supportedImageExtensions = ["jpg", "jpeg", "png", "webp"];
-const supportedVideoExtensions = ["mp4", "webm", "mov"];
-
 const discoveredCollectionData = {};
+let manifestData = null;
+
+async function loadManifest() {
+  const resp = await fetch("images.json");
+  if (!resp.ok) throw new Error("Failed to load images.json");
+  manifestData = await resp.json();
+  return manifestData;
+}
+
+function pathToTitle(path) {
+  const fullName = path.split("/").pop() || "";
+  const stem = fullName.replace(/\.[^.]+$/, "");
+  return stem;
+}
+
+function pathToItem(path, mediaType) {
+  return {
+    title: pathToTitle(path),
+    src: path,
+    mediaType: mediaType || "image"
+  };
+}
+
+function buildFromManifest(categoryKey, data) {
+  if (!data) return null;
+  const raw = data[categoryKey];
+  if (!raw) return null;
+
+  if (Array.isArray(raw) && raw.length > 0 && raw[0].type === "grouped") {
+    const entry = raw[0];
+    return {
+      groups: entry.groups.map(function(g) {
+        return {
+          name: g.name,
+          label: g.label,
+          items: g.items.map(function(src) { return pathToItem(src, g.mediaType); })
+        };
+      })
+    };
+  }
+
+  if (Array.isArray(raw)) {
+    return raw.map(function(src) { return pathToItem(src); });
+  }
+
+  return null;
+}
 
 function toTitleCase(text) {
   return text
@@ -88,93 +132,6 @@ function flattenCategoryItems(categoryKey) {
     );
   }
   return (data || []).map((item) => ({ ...item, category: categoryKey }));
-}
-
-function imageExists(url) {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () => resolve(true);
-    image.onerror = () => resolve(false);
-    image.src = url;
-  });
-}
-
-async function resolveImageByIndex(folder, index) {
-  for (const ext of supportedImageExtensions) {
-    const candidate = `${folder}/${index}.${ext}`;
-    // eslint-disable-next-line no-await-in-loop
-    const exists = await imageExists(candidate);
-    if (exists) {
-      return candidate;
-    }
-  }
-
-  return null;
-}
-
-async function discoverCategoryImages(categoryKey, maxIndex = 300, missLimit = 30, customFolder, customLabel) {
-  const config = categoryConfig[categoryKey] || {};
-  const folder = customFolder || config.folder;
-  const label = customLabel || config.label || "Media";
-  const results = [];
-  let misses = 0;
-
-  for (let i = 1; i <= maxIndex && misses < missLimit; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    const foundUrl = await resolveImageByIndex(folder, i);
-    if (foundUrl) {
-      results.push({
-        title: `${label} ${i}`,
-        src: foundUrl
-      });
-      misses = 0;
-    } else {
-      misses += 1;
-    }
-  }
-
-  return results;
-}
-
-async function resolveVideoByIndex(folder, index) {
-  for (const ext of supportedVideoExtensions) {
-    const candidate = `${folder}/${index}.${ext}`;
-    // eslint-disable-next-line no-await-in-loop
-    const exists = await new Promise((resolve) => {
-      const video = document.createElement("video");
-      video.preload = "metadata";
-      video.onloadedmetadata = () => resolve(true);
-      video.onerror = () => resolve(false);
-      video.src = candidate;
-    });
-    if (exists) {
-      return candidate;
-    }
-  }
-
-  return null;
-}
-
-async function discoverVideos(folder, maxIndex = 300, missLimit = 30) {
-  const results = [];
-  let misses = 0;
-
-  for (let i = 1; i <= maxIndex && misses < missLimit; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    const foundUrl = await resolveVideoByIndex(folder, i);
-    if (foundUrl) {
-      results.push({
-        title: `Video ${i}`,
-        src: foundUrl,
-        mediaType: "video"
-      });
-      misses = 0;
-    } else {
-      misses += 1;
-    }
-  }
-
-  return results;
 }
 
 function createGalleryItemHTML(item, category, opts = {}) {
@@ -378,45 +335,19 @@ const sectionObserver = new IntersectionObserver(
 observedSections.forEach((section) => sectionObserver.observe(section));
 
 async function initializeAutoGallery() {
-  const allCategoryKeys = Object.keys(categoryConfig);
+  try {
+    await loadManifest();
+  } catch (e) {
+    galleryNote.textContent = "Failed to load image manifest. Please refresh.";
+    return;
+  }
 
-  for (const cat of allCategoryKeys) {
-    const config = categoryConfig[cat];
-    if (config.groups && config.groups.length > 0) {
-      // Category with subfolder groups
-      discoveredCollectionData[cat] = { groups: [] };
-      for (const group of config.groups) {
-        const label = group.label || toTitleCase(group.name);
-        if (group.mediaType === "video") {
-          // eslint-disable-next-line no-await-in-loop
-          const videos = await discoverVideos(group.folder);
-          discoveredCollectionData[cat].groups.push({
-            name: group.name,
-            label: label,
-            items: videos
-          });
-        } else {
-          // eslint-disable-next-line no-await-in-loop
-          const items = await discoverCategoryImages(
-            cat, 300, 30,
-            group.folder,
-            label
-          );
-          discoveredCollectionData[cat].groups.push({
-            name: group.name,
-            label: label,
-            items: items.map((item, idx) => ({
-              ...item,
-              title: `${label} ${idx + 1}`,
-              mediaType: group.mediaType || "image"
-            }))
-          });
-        }
-      }
-    } else if (config.folder) {
-      // Category with flat folder
-      // eslint-disable-next-line no-await-in-loop
-      discoveredCollectionData[cat] = await discoverCategoryImages(cat);
+  const allCategoryKeys = Object.keys(categoryConfig);
+  for (var c = 0; c < allCategoryKeys.length; c++) {
+    var cat = allCategoryKeys[c];
+    var built = buildFromManifest(cat, manifestData);
+    if (built) {
+      discoveredCollectionData[cat] = built;
     }
   }
 
@@ -581,22 +512,9 @@ async function initializeAbout() {
     aboutTextEl.innerHTML = "<p class='text-zinc-400'>Edit images/about/content.js to add your bio.</p>";
   }
 
-  const images = [];
-  for (let i = 1; i <= 20; i += 1) {
-    let found = false;
-    for (const ext of supportedImageExtensions) {
-      // eslint-disable-next-line no-await-in-loop
-      const exists = await imageExists(`images/about/${i}.${ext}`);
-      if (exists) {
-        images.push({ src: `images/about/${i}.${ext}`, index: i });
-        found = true;
-        break;
-      }
-    }
-    if (!found && i > 2 && images.length > 0) {
-      break;
-    }
-  }
+  const images = [
+    { src: "images/about/1.png", index: 1 }
+  ];
 
   aboutPhotosEl.innerHTML = images
     .map((img) => `<img src="${img.src}" alt="About ${img.index}" loading="lazy" />`)
